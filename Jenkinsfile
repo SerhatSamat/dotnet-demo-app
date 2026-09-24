@@ -11,6 +11,6 @@ node {
         sh 'docker-compose up -d --build'
     }
     stage('Test') {
-        sh 'docker run --rm -v $(pwd):/app -w /app/TodoApp.Tests mcr.microsoft.com/dotnet/sdk:10.0 dotnet test'
+        sh 'docker exec todoapp dotnet test /src/TodoApp.Tests/TodoApp.Tests.csproj'
     }
 }
