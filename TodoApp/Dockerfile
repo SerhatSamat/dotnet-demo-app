@@ -1,24 +1,22 @@
-# 1. Build & Test stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# Kopieer alle bestanden
 COPY . .
 
-# Restaureer en bouw de oplossing
-RUN dotnet restore TodoApp.csproj
+# Voer restore uit met netwerk-fallback
+RUN dotnet restore TodoApp.csproj --disable-parallel || dotnet restore TodoApp.csproj
 
-# Test runner stage
+# Test-stage
 FROM build AS testrunner
 WORKDIR /src/TodoApp.Tests
-CMD ["dotnet", "test"]
+ENTRYPOINT ["dotnet", "test"]
 
-# Publish stage
+# Publish-stage
 FROM build AS publish
 WORKDIR /src
-RUN dotnet publish TodoApp.csproj -c Release -o /app
+RUN dotnet publish TodoApp.csproj -c Release -o /app --no-restore
 
-# 2. Runtime stage
+# Runtime-stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=publish /app .
