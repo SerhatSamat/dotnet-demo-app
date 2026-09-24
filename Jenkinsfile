@@ -11,6 +11,7 @@ node {
         sh 'docker-compose up -d --build'
     }
     stage('Test') {
-        sh 'docker-compose run --rm --entrypoint "dotnet test /src/TodoApp.Tests/TodoApp.Tests.csproj" todoapp'
+        sh 'docker build --target testrunner -t todoapp-tests .'
+        sh 'docker run --rm todoapp-tests'
     }
 }
