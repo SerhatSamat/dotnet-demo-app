@@ -11,7 +11,7 @@ node {
         sh 'docker-compose up -d --build'
     }
     stage('Test') {
-        // Dit zoekt automatisch naar een .sln of .csproj in de rootmap
-        sh 'docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:10.0 dotnet test'
+        // Geef de relatieve map 'TodoApp.Tests' mee als argument:
+        sh 'docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/dotnet/sdk:10.0 dotnet test TodoApp.Tests'
     }
 }
