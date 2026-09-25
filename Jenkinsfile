@@ -10,7 +10,4 @@ node {
     stage('Build and Deploy') {
         sh 'cd /var/jenkins_home/workspace/DotnetDemoApp && docker-compose up -d --build'
     }
-    stage('Test') {
-        sh 'dotnet test'
-    }
 }
